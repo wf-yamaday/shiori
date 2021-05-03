@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  db:
+    container_name: shiori_milvus
+    build:
+      context: ../.
+      dockerfile: ./infra/milvus/Dockerfile
+    volumes:
+      - ./milvus/data/db:/var/lib/milvus/db
+      - ./milvus/data/conf:/var/lib/milvus/conf
+      - ./milvus/data/logs:/var/lib/milvus/logs
+      - ./milvus/data/wal:/var/lib/milvus/wal
+    ports:
+      - 19530:19530
+      - 19121:19121
+    tty: true
+
+  mysql:
+    container_name: shiori_mysql
+    build:
+      context: ../.
+      dockerfile: ./infra/mysql/Dockerfile
+    volumes:
+      - ./mysql/conf/my.cnf:/etc/mysql/conf.d/my.cnf
+      - mysql_db:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      TZ: "Asia/Tokyo"
+      MYSQL_DATABASE: shiori
+      MYSQL_USER: shiori
+      MYSQL_PASSWORD: shiori
+      MYSQL_ROOT_PASSWORD: root
+    tty: true
+
+volumes:
+  mysql_db: {}
