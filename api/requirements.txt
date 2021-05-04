@@ -5,3 +5,5 @@ flask-sqlalchemy
 PyMySQL
 pymagnitude
 flasl-cors
+janome
+requests

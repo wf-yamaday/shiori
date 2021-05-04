@@ -1,5 +1,6 @@
 from infrastructure.database import db, ma
 from datetime import datetime
+from sqlalchemy import desc
 from marshmallow_sqlalchemy import SQLAlchemySchema, auto_field
 
 
@@ -15,11 +16,15 @@ class Bookmark(db.Model):
                            default=datetime.now, onupdate=datetime.now)
 
     def find_all(self):
-        return Bookmark.query.all()
+        return Bookmark.query.order_by(desc(Bookmark.created_at)).all()
+
+    def find_one(self, id):
+        return Bookmark.query.filter_by(id=id).first()
 
     def save(self, bookmark):
         db.session.add(bookmark)
         db.session.commit()
+        return bookmark
 
 
 class BookmarkSchema(SQLAlchemySchema):
