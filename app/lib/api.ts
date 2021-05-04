@@ -6,7 +6,7 @@ export async function getOGP(url: string) {
   if(url === '') return Promise.resolve({});
   return axios.get(`https://us-central1-shiori-dev-160df.cloudfunctions.net/getOgp?url=${url}`)
   .then((res) => { console.log('[info]', res.data); return res.data; })
-  .catch((err) => { return Promise.reject(err) })
+  .catch((err) => { return err })
 }
 
 export async function getAllBookmarksAsync() {

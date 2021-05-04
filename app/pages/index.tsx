@@ -43,15 +43,17 @@ export default function Home() {
     f();
   }, [])
 
-  const getOgpContent = useCallback(async () => {
+  useEffect(() => {
+    const f = async () => {
       const ogpObject = await getOGP(url);
-      console.log('[debug]', ogpObject);
       if(ogpObject[url] !== undefined && ogpObject !== {}) {
         setOgp(ogpObject[url])
       } else {
         setOgp({})
       }
-  }, [ogp])
+    }
+    f();
+  }, [url])
 
   const BookmarkList = bookmarks.map((item: any) => {
     return item.ogp.hasOwnProperty('og:title')?
@@ -79,7 +81,6 @@ export default function Home() {
             value={url}
             onChange={onChangeInputUrl}
             placeholder="ブックマークするページのURL"
-            onBlur={() => getOgpContent()}
           />
             {ogp.hasOwnProperty('og:title') ?
             <OgpBox ogp={ogp} /> : null}

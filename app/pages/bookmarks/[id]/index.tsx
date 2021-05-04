@@ -9,28 +9,30 @@ export default function Details() {
   const { id } = router.query
 
   const [bookmark, setBookmark] = useState<any>(undefined);
+  const [isLoading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if(!Number(id)) return
     const f = async () => {
       const bookmark = await getBookmarkByIdAsync(Number(id));
       setBookmark(bookmark)
+      setLoading(false)
     }
     f();
-  })
+  }, [id])
 
   return (
     <div>
       <main className={styles.container}>
         <p>詳細</p>
         {
-          bookmark?
+          isLoading?
+          null :
           <div className={styles.content}>
             <OgpBox ogp={bookmark.ogp} />
             <p>memo</p>
             <p>{bookmark.memo}</p>
           </div>
-          : null
         }
       </main>
     </div>
