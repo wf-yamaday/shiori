@@ -3,6 +3,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styles from '../styles/Home.module.css'
 import axios from 'axios'
 
+const BASE_URL = process.env.API_URL || 'http://localhost:5000'
+
+interface IFormData {
+  url: string,
+  memo?: string,
+  ogp: Object,
+}
+
 async function getOGP(url: string) {
   if(url === '') return Promise.resolve({});
   return axios.get(`https://us-central1-shiori-dev-160df.cloudfunctions.net/getOgp?url=${url}`)
@@ -10,7 +18,10 @@ async function getOGP(url: string) {
   .catch((err) => { return Promise.reject(err) })
 }
 
-async function handleSubmit() {
+async function handleSubmit(formData: IFormData) {
+  return axios.post(`${BASE_URL}/bookmarks`, formData)
+    .then((res) => console.log(res.data))
+    .catch((err) => console.log(err))
 }
 
 export default function Home() {
@@ -69,7 +80,15 @@ export default function Home() {
             onChange={onChangeInputMemo}
             placeholder="メモ"
           />
-          <button className={`${styles.formItem} btn`} type="button" onClick={() => handleSubmit()}>ブックマーク</button>
+          <button
+            className={`${styles.formItem} btn`}
+            type="button"
+            onClick={() => handleSubmit({
+              url: url,
+              memo: memo,
+              ogp: ogp
+            })}
+          >ブックマーク</button>
         </div>
       </main>
 
