@@ -1,6 +1,6 @@
 from infrastructure.models import Bookmark, BookmarkSchema
 from service.nlp import obtain_word_embeddings, get_text_by_ogp
-from infrastructure.milvus import save_vector
+from infrastructure.milvus import save_vector, get_vector_by_id, search
 
 
 def save_bookmark(bm_request):
@@ -17,3 +17,14 @@ def save_bookmark(bm_request):
     bm = bm.save(bm)
 
     return save_vector('bookmarks', vector, bm.id)
+
+
+def get_bookmark_by_id(id):
+    bookmark = Bookmark().find_one(id)
+    res = get_vector_by_id('bookmarks', id)
+    res = search('bookmarks', res['vectors'][0]['vector'])
+    print(len(res['result'][0]))
+    result = filter(lambda i: int(i['id']) >
+                    0 and int(i['id']) != id, res['result'][0])
+    print(list(result))
+    return BookmarkSchema().dump(bookmark)

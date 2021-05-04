@@ -26,3 +26,31 @@ def save_vector(name, vector, id):
         print('[error]', r.text)
         return False
     return True
+
+
+def get_vector_by_id(name, id):
+    r = requests.get(
+        '{}/collections/{}/vectors?ids={}'.format(MILVUS_HOST, name, id)
+    )
+    if r.status_code != 200:
+        print('[error]', r.text)
+    return r.json()
+
+
+def search(name, vector):
+    param = {
+        'search': {
+            'topk': 10,
+            'vectors': [vector],
+            'params': {
+                'nprobe': 16,
+            }
+        }
+    }
+    r = requests.put(
+        '{}/collections/{}/vectors'.format(MILVUS_HOST, name),
+        data=json.dumps(param)
+    )
+    if r.status_code != 200:
+        print('[error]', r.text)
+    return r.json()

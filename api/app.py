@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from infrastructure.database import init_db
 from infrastructure.models import Bookmark, BookmarkSchema
 from flask_cors import CORS
-from service.bookmarks import save_bookmark
+from service.bookmarks import save_bookmark, get_bookmark_by_id
 
 from infrastructure.milvus import init_milvus
 
@@ -21,9 +21,8 @@ app = create_app()
 
 @app.route('/bookmarks/<int:id>', methods=['GET'])
 def get(id):
-    bookmark = Bookmark().find_one(id)
-    bookmark_schema = BookmarkSchema()
-    return jsonify(bookmark_schema.dump(bookmark))
+    res = get_bookmark_by_id(id)
+    return jsonify(res)
 
 
 @app.route('/bookmarks', methods=['GET'])
