@@ -1,0 +1,7 @@
+Flask
+pymilvus==1.0.1
+sqlalchemy
+flask-sqlalchemy
+PyMySQL
+pymagnitude
+flasl-cors
