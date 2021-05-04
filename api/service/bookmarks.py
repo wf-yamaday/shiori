@@ -23,8 +23,8 @@ def get_bookmark_by_id(id):
     bookmark = Bookmark().find_one(id)
     res = get_vector_by_id('bookmarks', id)
     res = search('bookmarks', res['vectors'][0]['vector'])
-    print(len(res['result'][0]))
     result = filter(lambda i: int(i['id']) >
                     0 and int(i['id']) != id, res['result'][0])
-    print(list(result))
-    return BookmarkSchema().dump(bookmark)
+    ids = [i.get('id') for i in list(result)]
+    related_bookmarks = Bookmark().find_by_ids(list(ids))
+    return BookmarkSchema().dump(bookmark), BookmarkSchema(many=True).dump(related_bookmarks)

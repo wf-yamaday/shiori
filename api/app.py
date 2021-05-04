@@ -21,8 +21,11 @@ app = create_app()
 
 @app.route('/bookmarks/<int:id>', methods=['GET'])
 def get(id):
-    res = get_bookmark_by_id(id)
-    return jsonify(res)
+    res, related = get_bookmark_by_id(id)
+    return jsonify({
+        'bookmark': res,
+        'related': related
+    })
 
 
 @app.route('/bookmarks', methods=['GET'])

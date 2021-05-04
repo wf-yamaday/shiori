@@ -21,6 +21,9 @@ class Bookmark(db.Model):
     def find_one(self, id):
         return Bookmark.query.filter_by(id=id).first()
 
+    def find_by_ids(self, ids):
+        return Bookmark.query.filter(Bookmark.id.in_(ids)).all()
+
     def save(self, bookmark):
         db.session.add(bookmark)
         db.session.commit()
