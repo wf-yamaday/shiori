@@ -8,7 +8,6 @@ def create_app():
     app = Flask(__name__)
     CORS(app)
     app.config.from_object('config.Config')
-
     init_db(app)
 
     return app
@@ -21,6 +20,7 @@ app = create_app()
 def index():
     bookmark = Bookmark()
     bookmarks = bookmark.find_all()
+    print(bookmarks)
     bookmarks_schema = BookmarkSchema(many=True)
     return jsonify(bookmarks_schema.dump(bookmarks))
 

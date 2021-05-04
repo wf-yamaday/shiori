@@ -1,6 +1,6 @@
-from infrastructure.database import db
+from infrastructure.database import db, ma
 from datetime import datetime
-from marshmallow_sqlalchemy import ModelSchema
+from marshmallow_sqlalchemy import SQLAlchemySchema, auto_field
 
 
 class Bookmark(db.Model):
@@ -22,6 +22,14 @@ class Bookmark(db.Model):
         db.session.commit()
 
 
-class BookmarkSchema():
+class BookmarkSchema(SQLAlchemySchema):
     class Meta:
         model = Bookmark
+        load_instance = True
+
+    id = auto_field()
+    url = auto_field()
+    memo = auto_field()
+    ogp = auto_field()
+    created_at = auto_field()
+    updated_at = auto_field()
