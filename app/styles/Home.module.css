@@ -1,6 +1,6 @@
 .container {
   margin: auto;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,7 +13,7 @@
   font-weight: 700;
 }
 
-.formContent {
+.content {
   width: 80%;
 }
 

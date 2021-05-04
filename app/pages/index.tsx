@@ -1,7 +1,10 @@
 import Head from 'next/head'
+import Link from 'next/link'
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from '../styles/Home.module.css'
 import axios from 'axios'
+import { OgpBox } from '../components/OgpBox'
+import { getAllBookmarksAsync, getOGP } from '../lib/index'
 
 const BASE_URL = process.env.API_URL || 'http://localhost:5000'
 
@@ -9,13 +12,6 @@ interface IFormData {
   url: string,
   memo?: string,
   ogp: Object,
-}
-
-async function getOGP(url: string) {
-  if(url === '') return Promise.resolve({});
-  return axios.get(`https://us-central1-shiori-dev-160df.cloudfunctions.net/getOgp?url=${url}`)
-  .then((res) => { console.log('[info]', res.data); return res.data; })
-  .catch((err) => { return Promise.reject(err) })
 }
 
 async function handleSubmit(formData: IFormData) {
@@ -29,6 +25,7 @@ export default function Home() {
   const [url, setUrl] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
   const [ogp, setOgp] = useState<Object>({});
+  const [bookmarks, setBookmarks] = useState<Array<Object>>([]);
 
   const onChangeInputUrl = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(event.target.value);
@@ -36,6 +33,14 @@ export default function Home() {
 
   const onChangeInputMemo = useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMemo(event.target.value);
+  }, [])
+
+  useEffect(() => {
+    const f = async () => {
+      const bookmarks = await getAllBookmarksAsync();
+      setBookmarks(bookmarks)
+    }
+    f();
   }, [])
 
   const getOgpContent = useCallback(async () => {
@@ -48,6 +53,16 @@ export default function Home() {
       }
   }, [ogp])
 
+  const BookmarkList = bookmarks.map((item: any) => {
+    return item.ogp.hasOwnProperty('og:title')?
+    (<Link href="/bookmarks/[id]" as={`/bookmarks/${item.id}`} key={item.id}>
+      <a>
+        <OgpBox ogp={item.ogp} />
+      </a>
+    </Link>)
+    : null
+  })
+
   return (
     <div>
       <Head>
@@ -58,7 +73,7 @@ export default function Home() {
 
       <main className={styles.container}>
         <h1 className={styles.title}>栞 - Shiori -</h1>
-        <div className={styles.formContent}>
+        <div className={styles.content}>
           <input
             className={styles.formItem}
             value={url}
@@ -67,13 +82,7 @@ export default function Home() {
             onBlur={() => getOgpContent()}
           />
             {ogp.hasOwnProperty('og:title') ?
-            <div className="ogp-box">
-              <div className="text">
-                <p className="title">{ogp['og:title']}</p>
-                {ogp.hasOwnProperty('og:description')? <span className="description">{ogp['og:description']}</span> : null}
-              </div>
-              {ogp.hasOwnProperty('og:image')? <img className="img" src={ogp['og:image']} /> : null}
-            </div> : null}
+            <OgpBox ogp={ogp} /> : null}
           <textarea
             className={styles.formItem}
             value={memo}
@@ -89,6 +98,9 @@ export default function Home() {
               ogp: ogp
             })}
           >ブックマーク</button>
+          <hr/>
+          <p>ブックマーク一覧</p>
+          {BookmarkList}
         </div>
       </main>
 
