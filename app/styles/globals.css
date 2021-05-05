@@ -8,6 +8,28 @@ body {
   padding: 0;
   margin: 0;
   font-family: "Noto Sans Japanese", sans-serif;
+  background-color: #eaf3d7;
+  background-image:
+            radial-gradient(290px 300px , rgba(238,226,211, 0.8) 20%, transparent 20%),
+            radial-gradient(800px 780px , rgba(238,226,211, 0.8) 20%, transparent 20%),
+            radial-gradient(1000px 990px , rgba(238,226,211, 0.8) 20%, transparent 20%),
+            radial-gradient(400px 380px , rgba(238,226,211, 0.8) 20%, transparent 20%),
+            radial-gradient(750px 750px , rgba(238,226,211, 0.8) 20%, transparent 20%),
+            radial-gradient(100px 100px , rgba(238,226,211, 0.8) 20%, transparent 20%);
+        background-size:
+            1230px 1280px,
+            810px 910px,
+            1470px 990px,
+            1200px 1700px,
+            1520px 1200px,
+            1100px 1300px;
+        background-position:
+            -300px -550px,
+            -200px 100px,
+            50px 510px,
+            -200px -550px,
+            -180px -250px,
+            130px -150px;
 }
 
 a {
