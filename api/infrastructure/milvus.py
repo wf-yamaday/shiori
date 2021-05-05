@@ -6,7 +6,7 @@ MILVUS_HOST = 'http://127.0.0.1:19121'
 
 def init_milvus(name):
     param = {'collection_name': name, 'dimension': 300,
-             'index_file_size': 1024, 'metric_type': 'IP'}
+             'index_file_size': 1024, 'metric_type': 'L2'}
     r = requests.post(
         '{}/collections'.format(MILVUS_HOST), data=json.dumps(param)
     )
@@ -40,7 +40,7 @@ def get_vector_by_id(name, id):
 def search(name, vector):
     param = {
         'search': {
-            'topk': 10,
+            'topk': 4,
             'vectors': [vector],
             'params': {
                 'nprobe': 16,
