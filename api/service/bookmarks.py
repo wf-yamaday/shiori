@@ -25,6 +25,14 @@ def get_bookmark_by_id(id):
     res = search('bookmarks', res['vectors'][0]['vector'])
     result = filter(lambda i: int(i['id']) >
                     0 and int(i['id']) != id, res['result'][0])
-    ids = [i.get('id') for i in list(result)]
+    result = list(result)
+    print(result)
+    ids = [i.get('id') for i in result]
+
     related_bookmarks = Bookmark().find_by_ids(list(ids))
-    return BookmarkSchema().dump(bookmark), BookmarkSchema(many=True).dump(related_bookmarks)
+
+    # 距離の近い順に並べ替え
+    q = BookmarkSchema(many=True).dump(related_bookmarks)
+    related_map = {b['id']: b for b in q}
+    sorted_related = [related_map[int(i)] for i in ids]
+    return BookmarkSchema().dump(bookmark), sorted_related
