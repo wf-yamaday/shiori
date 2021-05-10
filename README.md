@@ -6,8 +6,10 @@
 
 自然言語処理によって自動で関連記事を結ぶブックマークアプリケーションです。
 
+![](./img/concept.jpg)
+
 ## 発表スライド
 
-発表に使用したスライドを Google スライドで公開しています。
+発表に使用したスライドをGoogleスライドで公開しています。
 
 [発表スライド - Google スライド](https://docs.google.com/presentation/d/1eFvd7LVMesMztmoStGUupmxZKd1ixVgCnPT4m5YUaVY/edit?usp=sharing)
